@@ -16,4 +16,18 @@ tests =
                 in
                   Expect.equal 3 (calculateResultingFrequency list)
         ]
+        ,
+          test "Given another simple list" <|
+              \_ ->
+                  let
+                    list = [1, 1, -2]
+                  in
+                    Expect.equal 0 (calculateResultingFrequency list)
+        ,
+          test "Given yet another simple list" <|
+              \_ ->
+                  let
+                    list = [-1, -2, -3]
+                  in
+                    Expect.equal -6 (calculateResultingFrequency list)
     ]
