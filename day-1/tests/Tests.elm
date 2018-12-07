@@ -1,6 +1,7 @@
 module Tests exposing (tests)
 
 import ChronalCalibration exposing (..)
+import DayInput exposing (dayInput)
 import Expect
 import Test exposing (..)
 
@@ -30,6 +31,13 @@ tests =
                             [ -1, -2, -3 ]
                     in
                     Expect.equal -6 (calculateResultingFrequency list)
+            , test "Given the day input" <|
+                \_ ->
+                    let
+                        list =
+                            dayInput
+                    in
+                    Expect.equal 416 (calculateResultingFrequency list)
             ]
         , describe "Finds the first frequency that repeats twice"
             [ test "Example list" <|
@@ -67,5 +75,12 @@ tests =
                             [ 7, 7, -2, -7, -4 ]
                     in
                     Expect.equal 14 (findFirstFrequencyThatRepeatsTwice list)
+            , test "Day Input" <|
+                \_ ->
+                    let
+                        list =
+                            dayInput
+                    in
+                    Expect.equal 56752 (findFirstFrequencyThatRepeatsTwice list)
             ]
         ]
