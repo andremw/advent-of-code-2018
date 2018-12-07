@@ -3,7 +3,7 @@ module Tests exposing (tests)
 import Expect
 import Test exposing (..)
 
-import ChronalCalibration exposing (calculateResultingFrequency)
+import ChronalCalibration exposing (..)
 
 tests : Test
 tests =
@@ -15,7 +15,6 @@ tests =
                   list = [1, 1, 1]
                 in
                   Expect.equal 3 (calculateResultingFrequency list)
-        ]
         ,
           test "Given another simple list" <|
               \_ ->
@@ -30,4 +29,14 @@ tests =
                     list = [-1, -2, -3]
                   in
                     Expect.equal -6 (calculateResultingFrequency list)
+        ]
+    ,
+      describe "Finds the first frequency that repeats twice"
+          [ test "Given a simple list" <|
+              \_ ->
+                let
+                  list = [1, -1]
+                in
+                  Expect.equal 0 (findFrequencyThatRepeatsTwice list)
+          ]
     ]
