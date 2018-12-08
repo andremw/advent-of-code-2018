@@ -3,6 +3,7 @@ module ChronalCalibration exposing
     , findFirstFrequencyThatRepeatsTwice
     )
 
+import Array exposing (..)
 import Set exposing (..)
 
 
@@ -11,16 +12,16 @@ calculateResultingFrequency frequencies =
     List.sum frequencies
 
 
-findFirstFrequencyThatRepeatsTwice : List Int -> Int
+findFirstFrequencyThatRepeatsTwice : Array Int -> Int
 findFirstFrequencyThatRepeatsTwice frequencies =
-    firstFrequencyHelper frequencies frequencies 0 (Set.insert 0 Set.empty)
+    firstFrequencyHelper frequencies 0 0 (Set.insert 0 Set.empty)
 
 
-firstFrequencyHelper : List Int -> List Int -> Int -> Set Int -> Int
-firstFrequencyHelper originalFrequencies partialFrequencies currentFrequency achievedFrequencies =
+firstFrequencyHelper : Array Int -> Int -> Int -> Set Int -> Int
+firstFrequencyHelper frequencies currentIndex currentFrequency achievedFrequencies =
     let
         nextFrequency =
-            Maybe.withDefault 0 (List.head partialFrequencies)
+            Maybe.withDefault 0 (Array.get currentIndex frequencies)
 
         newFrequency =
             currentFrequency + nextFrequency
@@ -50,26 +51,25 @@ firstFrequencyHelper originalFrequencies partialFrequencies currentFrequency ach
             newAchievedFrequencies =
                 Set.insert newFrequency achievedFrequencies
 
-            nextPartialFrequencies =
-                List.drop 1 partialFrequencies
+            {-
+                by using modulo we can traverse the array like a circular list
+               "modBy n a" (or "a modulo n" or "a % n", in other languages) is modular arithmetic
+               it works this way:
+               - if n is zero it is division by zero, therefore not allowed (error or undefined depending on lang)
+               - the result is always an integer
+               - if n is greater than a the result is a
+               for example:
 
-            hasReachedEndOfList =
-                List.isEmpty nextPartialFrequencies
+                modBy 0 5 -> invalid
+                modBy 2 10 -> 0
+                modBy 5 2 -> 2
+
+                a video to better understand: https://www.youtube.com/watch?v=b5cb_nfDyyM
+            -}
+            nextIndex =
+                modBy (Array.length frequencies) (currentIndex + 1)
 
             -- _ =
             --     Debug.log "Partial frequencies" partialFrequencies
         in
-        -- if we have reached the end of list we start again
-        if hasReachedEndOfList then
-            firstFrequencyHelper
-                originalFrequencies
-                originalFrequencies
-                newFrequency
-                newAchievedFrequencies
-
-        else
-            firstFrequencyHelper
-                originalFrequencies
-                nextPartialFrequencies
-                newFrequency
-                newAchievedFrequencies
+        firstFrequencyHelper frequencies nextIndex newFrequency newAchievedFrequencies
