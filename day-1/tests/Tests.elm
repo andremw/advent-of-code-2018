@@ -45,42 +45,42 @@ tests =
                 \_ ->
                     let
                         list =
-                            Array.fromList [ 1, -2, 3, 1 ]
+                            [ 1, -2, 3, 1 ]
                     in
                     Expect.equal 2 (findFirstFrequencyThatRepeatsTwice list)
             , test "First list" <|
                 \_ ->
                     let
                         list =
-                            Array.fromList [ 1, -1 ]
+                            [ 1, -1 ]
                     in
                     Expect.equal 0 (findFirstFrequencyThatRepeatsTwice list)
             , test "Second list" <|
                 \_ ->
                     let
                         list =
-                            Array.fromList [ 3, 3, 4, -2, -4 ]
+                            [ 3, 3, 4, -2, -4 ]
                     in
                     Expect.equal 10 (findFirstFrequencyThatRepeatsTwice list)
             , test "Third list" <|
                 \_ ->
                     let
                         list =
-                            Array.fromList [ -6, 3, 8, 5, -6 ]
+                            [ -6, 3, 8, 5, -6 ]
                     in
                     Expect.equal 5 (findFirstFrequencyThatRepeatsTwice list)
             , test "Fourth list" <|
                 \_ ->
                     let
                         list =
-                            Array.fromList [ 7, 7, -2, -7, -4 ]
+                            [ 7, 7, -2, -7, -4 ]
                     in
                     Expect.equal 14 (findFirstFrequencyThatRepeatsTwice list)
             , test "Day Input" <|
                 \_ ->
                     let
                         list =
-                            Array.fromList dayInput
+                            dayInput
                     in
                     Expect.equal 56752 (findFirstFrequencyThatRepeatsTwice list)
             ]
