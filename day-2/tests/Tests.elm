@@ -38,5 +38,18 @@ tests =
                             List.filter (hasNDuplicateLetters 3) input
                     in
                     Expect.equal 12 (List.length with2Duplicates * List.length with3Duplicates)
+            , test "From exercise input" <|
+                \_ ->
+                    let
+                        input =
+                            dayInput
+
+                        with2Duplicates =
+                            List.filter (hasNDuplicateLetters 2) input
+
+                        with3Duplicates =
+                            List.filter (hasNDuplicateLetters 3) input
+                    in
+                    Expect.equal 5904 (List.length with2Duplicates * List.length with3Duplicates)
             ]
         ]
