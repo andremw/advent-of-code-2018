@@ -54,24 +54,22 @@ differentLettersHelper first second count =
                     secondListTail =
                         Maybe.withDefault [] (List.tail second)
 
-                    _ =
-                        Debug.log "first list"
-                            ("head: "
-                                ++ String.fromChar head
-                                ++ " tail: "
-                                ++ String.fromList tail
-                            )
-
-                    _ =
-                        Debug.log "secondList"
-                            ("head: "
-                                ++ String.fromChar secondListHead
-                                ++ " tail: "
-                                ++ String.fromList secondListTail
-                            )
-
-                    _ =
-                        Debug.log "previous diff count" count
+                    -- _ =
+                    --     Debug.log "first list"
+                    --         ("head: "
+                    --             ++ String.fromChar head
+                    --             ++ " tail: "
+                    --             ++ String.fromList tail
+                    --         )
+                    -- _ =
+                    --     Debug.log "secondList"
+                    --         ("head: "
+                    --             ++ String.fromChar secondListHead
+                    --             ++ " tail: "
+                    --             ++ String.fromList secondListTail
+                    --         )
+                    -- _ =
+                    --     Debug.log "previous diff count" count
                 in
                 if head /= secondListHead then
                     differentLettersHelper tail secondListTail (count + 1)
