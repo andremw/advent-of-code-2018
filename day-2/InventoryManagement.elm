@@ -94,22 +94,21 @@ findCommonLetters ( a, b ) =
         |> String.fromList
 
 
-findTwoCorrectBoxIDs : List String -> ( String, String )
+findTwoCorrectBoxIDs : List String -> Maybe ( String, String )
 findTwoCorrectBoxIDs ids =
     let
         filteredIds =
             ids
                 |> List.filter (\id -> List.any (hasCommonLetters 1 id) ids)
 
-        _ =
-            Debug.log "filteredIds" filteredIds
-
+        -- _ =
+        --     Debug.log "filteredIds" filteredIds
         result =
             case filteredIds of
                 first :: second :: _ ->
-                    ( first, second )
+                    Just ( first, second )
 
                 _ ->
-                    ( "", "" )
+                    Nothing
     in
     result

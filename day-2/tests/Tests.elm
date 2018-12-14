@@ -11,6 +11,10 @@ hasOneCommonLetter =
     hasCommonLetters 1
 
 
+defaultTuple =
+    Maybe.withDefault ( "", "" )
+
+
 tests : Test
 tests =
     describe "Day 2 - Inventory Management System"
@@ -79,7 +83,10 @@ tests =
                         input =
                             [ "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz" ]
                     in
-                    Expect.equal ( "fghij", "fguij" ) (findTwoCorrectBoxIDs input)
+                    input
+                        |> findTwoCorrectBoxIDs
+                        |> defaultTuple
+                        |> Expect.equal ( "fghij", "fguij" )
             , test "From example input" <|
                 \_ ->
                     let
@@ -88,6 +95,7 @@ tests =
                     in
                     input
                         |> findTwoCorrectBoxIDs
+                        |> defaultTuple
                         |> findCommonLetters
                         |> Expect.equal "fgij"
             , test "From day input" <|
@@ -98,6 +106,7 @@ tests =
                     in
                     input
                         |> findTwoCorrectBoxIDs
+                        |> defaultTuple
                         |> findCommonLetters
                         |> Expect.equal "jiwamotgsfrudclzbyzkhlrvp"
             ]
