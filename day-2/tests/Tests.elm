@@ -3,7 +3,7 @@ module Tests exposing (tests)
 import DayInput exposing (dayInput)
 import Dict exposing (..)
 import Expect
-import InventoryManagement exposing (hasNDuplicateLetters)
+import InventoryManagement exposing (findCommonLetters, hasNDuplicateLetters, hasOneCommonLetter)
 import Test exposing (..)
 
 
@@ -51,5 +51,20 @@ tests =
                             List.filter (hasNDuplicateLetters 3) input
                     in
                     Expect.equal 5904 (List.length with2Duplicates * List.length with3Duplicates)
+            ]
+        , describe "Find the common letters between two correct box IDs"
+            [ test "Checks if there are only one different char at the same position between strings \"abcde\" and \"axcye\" " <|
+                \_ ->
+                    Expect.equal False (hasOneCommonLetter "abcde" "axcye")
+            , test "Checks if there are only one different char at the same position between strings \"abcde\" and \"fghij\" " <|
+                \_ ->
+                    Expect.equal False (hasOneCommonLetter "abcde" "fghij")
+            , test "From example input" <|
+                \_ ->
+                    let
+                        input =
+                            [ "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz" ]
+                    in
+                    Expect.equal "fgij" (findCommonLetters input)
             ]
         ]
