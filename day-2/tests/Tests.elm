@@ -59,6 +59,9 @@ tests =
             , test "Checks if there are only one different char at the same position between strings \"abcde\" and \"fghij\" " <|
                 \_ ->
                     Expect.equal False (hasOneCommonLetter "abcde" "fghij")
+            , test "Checks if there are only one different char at the same position between strings \"fghij\" and \"fguij\" " <|
+                \_ ->
+                    Expect.equal True (hasOneCommonLetter "fghij" "fguij")
             , test "From example input" <|
                 \_ ->
                     let
