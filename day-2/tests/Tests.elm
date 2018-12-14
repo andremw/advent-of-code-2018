@@ -3,8 +3,12 @@ module Tests exposing (tests)
 import DayInput exposing (dayInput)
 import Dict exposing (..)
 import Expect
-import InventoryManagement exposing (findCommonLetters, hasNDuplicateLetters, hasOneCommonLetter)
+import InventoryManagement exposing (findCommonLetters, findTwoCorrectBoxIDs, hasCommonLetters, hasNDuplicateLetters)
 import Test exposing (..)
+
+
+hasOneCommonLetter =
+    hasCommonLetters 1
 
 
 tests : Test
@@ -62,12 +66,39 @@ tests =
             , test "Checks if there are only one different char at the same position between strings \"fghij\" and \"fguij\" " <|
                 \_ ->
                     Expect.equal True (hasOneCommonLetter "fghij" "fguij")
+            , test "Finds substring of common letters between two strings" <|
+                \_ ->
+                    let
+                        input =
+                            ( "abcde", "abcdx" )
+                    in
+                    Expect.equal "abcd" (findCommonLetters input)
+            , test "Finds two correct box ids from example input" <|
+                \_ ->
+                    let
+                        input =
+                            [ "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz" ]
+                    in
+                    Expect.equal ( "fghij", "fguij" ) (findTwoCorrectBoxIDs input)
             , test "From example input" <|
                 \_ ->
                     let
                         input =
                             [ "abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz" ]
                     in
-                    Expect.equal "fgij" (findCommonLetters input)
+                    input
+                        |> findTwoCorrectBoxIDs
+                        |> findCommonLetters
+                        |> Expect.equal "fgij"
+            , test "From day input" <|
+                \_ ->
+                    let
+                        input =
+                            dayInput
+                    in
+                    input
+                        |> findTwoCorrectBoxIDs
+                        |> findCommonLetters
+                        |> Expect.equal "jiwamotgsfrudclzbyzkhlrvp"
             ]
         ]

@@ -1,6 +1,10 @@
-module InventoryManagement exposing (findCommonLetters, hasNDuplicateLetters, hasOneCommonLetter)
+module InventoryManagement exposing (findCommonLetters, findTwoCorrectBoxIDs, hasCommonLetters, hasNDuplicateLetters)
 
 import Dict exposing (..)
+
+
+
+-- PART 1
 
 
 hasNDuplicateLetters : Int -> String -> Bool
@@ -22,9 +26,13 @@ keepOccurrences item occurrences =
         Dict.insert item 1 occurrences
 
 
-hasOneCommonLetter : String -> String -> Bool
-hasOneCommonLetter firstString secondString =
-    countDifferentLettersAtTheSamePosition firstString secondString == 1
+
+-- PART 2
+
+
+hasCommonLetters : Int -> String -> String -> Bool
+hasCommonLetters num firstString secondString =
+    countDifferentLettersAtTheSamePosition firstString secondString == num
 
 
 countDifferentLettersAtTheSamePosition : String -> String -> Int
@@ -78,6 +86,30 @@ differentLettersHelper first second count =
                     differentLettersHelper tail secondListTail count
 
 
-findCommonLetters : List String -> String
-findCommonLetters boxes =
-    "fgij"
+findCommonLetters : ( String, String ) -> String
+findCommonLetters ( a, b ) =
+    List.map2 Tuple.pair (String.toList a) (String.toList b)
+        |> List.filter (\( strA, strB ) -> strA == strB)
+        |> List.map Tuple.first
+        |> String.fromList
+
+
+findTwoCorrectBoxIDs : List String -> ( String, String )
+findTwoCorrectBoxIDs ids =
+    let
+        filteredIds =
+            ids
+                |> List.filter (\id -> List.any (hasCommonLetters 1 id) ids)
+
+        _ =
+            Debug.log "filteredIds" filteredIds
+
+        result =
+            case filteredIds of
+                first :: second :: _ ->
+                    ( first, second )
+
+                _ ->
+                    ( "", "" )
+    in
+    result
