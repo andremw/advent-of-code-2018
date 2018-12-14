@@ -38,42 +38,46 @@ countDifferentLettersAtTheSamePosition firstString secondString =
 
 differentLettersHelper : List Char -> List Char -> Int -> Int
 differentLettersHelper first second count =
-    case first of
-        [] ->
-            count
+    if count > 1 then
+        count
 
-        head :: tail ->
-            let
-                secondListHead =
-                    Maybe.withDefault '*' (List.head second)
+    else
+        case first of
+            [] ->
+                count
 
-                secondListTail =
-                    Maybe.withDefault [] (List.tail second)
+            head :: tail ->
+                let
+                    secondListHead =
+                        Maybe.withDefault '*' (List.head second)
 
-                _ =
-                    Debug.log "first list"
-                        ("head: "
-                            ++ String.fromChar head
-                            ++ " tail: "
-                            ++ String.fromList tail
-                        )
+                    secondListTail =
+                        Maybe.withDefault [] (List.tail second)
 
-                _ =
-                    Debug.log "secondList"
-                        ("head: "
-                            ++ String.fromChar secondListHead
-                            ++ " tail: "
-                            ++ String.fromList secondListTail
-                        )
+                    _ =
+                        Debug.log "first list"
+                            ("head: "
+                                ++ String.fromChar head
+                                ++ " tail: "
+                                ++ String.fromList tail
+                            )
 
-                _ =
-                    Debug.log "previous diff count" count
-            in
-            if head /= secondListHead then
-                differentLettersHelper tail secondListTail (count + 1)
+                    _ =
+                        Debug.log "secondList"
+                            ("head: "
+                                ++ String.fromChar secondListHead
+                                ++ " tail: "
+                                ++ String.fromList secondListTail
+                            )
 
-            else
-                differentLettersHelper tail secondListTail count
+                    _ =
+                        Debug.log "previous diff count" count
+                in
+                if head /= secondListHead then
+                    differentLettersHelper tail secondListTail (count + 1)
+
+                else
+                    differentLettersHelper tail secondListTail count
 
 
 findCommonLetters : List String -> String
