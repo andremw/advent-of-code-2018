@@ -9,7 +9,24 @@ tests : Test
 tests =
     describe "Day 3 - No Matter How You Slice It"
         [ describe "ClaimParser"
-            [ test """
+            [ skip <|
+                test """
+                Throws an error
+                """ <|
+                    \_ ->
+                        let
+                            expected =
+                                { id = 1
+                                , x = 896
+                                , y = 863
+                                , width = 29
+                                , height = 19
+                                }
+                        in
+                        "1 @ 896,863: 29x19"
+                            |> ClaimParser.fromString
+                            |> Expect.equal (Err "I expected a '#' indicating the claim ID")
+            , test """
                 Parses #1 @ 896,863: 29x19 as a
                 Claim { id: 1, x: 896, y: 863, width: 29, height: 19 }
                 """ <|
