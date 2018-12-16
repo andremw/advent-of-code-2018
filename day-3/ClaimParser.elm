@@ -1,5 +1,7 @@
 module ClaimParser exposing (Claim, fromString)
 
+import Parser exposing (..)
+
 
 type alias Claim =
     { id : Int
@@ -10,11 +12,25 @@ type alias Claim =
     }
 
 
-fromString : String -> Claim
-fromString _ =
-    { id = 1
-    , x = 896
-    , y = 683
-    , width = 29
-    , height = 19
-    }
+fromString : String -> Result String Claim
+fromString =
+    Parser.run parseClaim >> Result.mapError Parser.deadEndsToString
+
+
+parseClaim : Parser Claim
+parseClaim =
+    -- "#1 @ 896,863: 29x19"
+    succeed Claim
+        |. symbol "#"
+        |= int
+        |. spaces
+        |. symbol "@"
+        |. spaces
+        |= int
+        |. symbol ","
+        |= int
+        |. symbol ":"
+        |. spaces
+        |= int
+        |. symbol "x"
+        |= int

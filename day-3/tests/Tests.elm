@@ -18,13 +18,13 @@ tests =
                         expected =
                             { id = 1
                             , x = 896
-                            , y = 683
+                            , y = 863
                             , width = 29
                             , height = 19
                             }
                     in
                     "#1 @ 896,863: 29x19"
                         |> ClaimParser.fromString
-                        |> Expect.equal expected
+                        |> Expect.equal (Ok expected)
             ]
         ]
