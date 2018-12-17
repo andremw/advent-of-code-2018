@@ -26,12 +26,6 @@ calculateSquareInches claims =
 
         _ =
             Debug.log "all tuples" allTuples
-
-        validClaim =
-            Dict.values allTuples |> List.filter (\n -> n == 1)
-
-        _ =
-            Debug.log "valid claim" validClaim
     in
     Dict.values allTuples |> List.filter (\n -> n >= 2) |> List.length
 
