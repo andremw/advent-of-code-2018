@@ -1,59 +1,56 @@
-module ReposeRecord exposing (findWhenToSneakIn)
+module ReposeRecord exposing (findWhenToSneakIn, findWhenToSneakIn2)
 
 import ActionRecordParser exposing (Action(..), ActionRecord, fromString)
 import Dict exposing (Dict)
 
 
+findWhenToSneakIn2 : List String -> Int
+findWhenToSneakIn2 records =
+    let
+        guardsDict =
+            createGuardsDictFromRecords records
+    in
+    guardsDict
+        |> Dict.toList
+        |> List.sortWith flippedSort
+        |> List.head
+        |> Maybe.map Tuple.first
+        |> Maybe.map (\( guardId, minuteMostSlept ) -> guardId * minuteMostSlept)
+        |> Maybe.withDefault 0
+
+
 findWhenToSneakIn : List String -> Int
 findWhenToSneakIn records =
     let
-        parsedRecords =
-            records |> List.sort |> List.filterMap (fromString >> Result.toMaybe)
-
         -- _ =
         --     Debug.log "parsed records" parsedRecords
+        guardsDict : Dict ( Int, Int ) Int
         guardsDict =
-            createGuardsDict parsedRecords
+            createGuardsDictFromRecords records
 
-        _ =
-            Debug.log "guards dict" guardsDict
-
-        sleepRecords =
+        -- _ =
+        --     Debug.log "guards dict" guardsDict
+        sleepRanking : List ( Int, Int )
+        sleepRanking =
             guardsDict
-                -- |> Dict.toList
-                -- |> List.foldl
-                --     (\data recs ->
-                --         let
-                --             key =
-                --                 Tuple.first data
-                --             ( guardId, minute ) =
-                --                 key
-                --             sleepOccurrences =
-                --                 Tuple.second
-                --         in
-                --         updateOccurrences guardId recs
-                --     )
-                --     Dict.empty
                 |> Dict.foldl
-                    (\( guardId, minute ) sleepOccurrences recs ->
-                        updateOccurrences guardId recs
+                    (\( guardId, _ ) sleepOccurrences rankings ->
+                        updateSleepRanking guardId sleepOccurrences rankings
                     )
                     Dict.empty
                 |> Dict.toList
                 |> sortBySleepTime
 
-        _ =
-            Debug.log "sleep records" sleepRecords
-
+        -- _ =
+        --     Debug.log "sleep ranking" sleepRanking
         sleeper =
-            Maybe.withDefault ( -1, -1 ) (List.head sleepRecords)
+            Maybe.withDefault ( -1, -1 ) (List.head sleepRanking)
 
         sleeperId =
             Tuple.first sleeper
 
-        _ =
-            Debug.log "sleeper id" sleeperId
-
+        -- _ =
+        --     Debug.log "sleeper id" sleeperId
         minuteMostSlept =
             guardsDict
                 |> Dict.filter (\key value -> Tuple.first key == sleeperId)
@@ -63,12 +60,17 @@ findWhenToSneakIn records =
                 |> Maybe.map Tuple.first
                 |> Maybe.map Tuple.second
 
-        _ =
-            Debug.log "minute most slept" minuteMostSlept
+        -- _ =
+        --     Debug.log "minute most slept" minuteMostSlept
     in
     minuteMostSlept
         |> Maybe.map ((*) sleeperId)
         |> Maybe.withDefault 0
+
+
+createGuardsDictFromRecords : List String -> Dict ( Int, Int ) Int
+createGuardsDictFromRecords =
+    List.sort >> List.filterMap (fromString >> Result.toMaybe) >> createGuardsDict
 
 
 sortBySleepTime : List ( Int, Int ) -> List ( Int, Int )
@@ -81,7 +83,6 @@ sortByOccurrences a b =
     flippedSort ( 1, Tuple.second a ) ( 1, Tuple.second b )
 
 
-flippedSort : ( Int, Int ) -> ( Int, Int ) -> Order
 flippedSort a b =
     case compare (Tuple.second a) (Tuple.second b) of
         LT ->
@@ -132,3 +133,12 @@ updateOccurrences comp someDict =
 
     else
         Dict.insert comp 1 someDict
+
+
+updateSleepRanking : Int -> Int -> Dict Int Int -> Dict Int Int
+updateSleepRanking guardId minute ranking =
+    if Dict.member guardId ranking then
+        Dict.update guardId (Maybe.map ((+) minute)) ranking
+
+    else
+        Dict.insert guardId minute ranking
