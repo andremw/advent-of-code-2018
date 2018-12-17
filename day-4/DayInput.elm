@@ -2,7 +2,10 @@ module DayInput exposing (dayInput)
 
 
 dayInput =
-    """
+    List.map String.trim <|
+        String.lines <|
+            String.trim <|
+                """
     [1518-11-13 00:04] Guard #2411 begins shift
     [1518-09-18 00:43] wakes up
     [1518-08-29 23:57] Guard #1871 begins shift
