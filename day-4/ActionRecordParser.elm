@@ -15,7 +15,7 @@ type alias ActionRecord =
     , day : Int
     , hour : Int
     , minute : Int
-    , guardId : Int
+    , guardId : Maybe Int
     , action : Action
     }
 
@@ -30,9 +30,9 @@ parseActionRecord =
     -- "[1518-11-01 00:00] Guard #10 begins shift"
     succeed ActionRecord
         |. symbol "["
-        |= int
+        |= recordInt
         |. symbol "-"
-        |= int
+        |= recordInt
         |. symbol "-"
         |= recordInt
         |. spaces
@@ -40,9 +40,17 @@ parseActionRecord =
         |. symbol ":"
         |= recordInt
         |. symbol "]"
-        |. chompUntil "#"
-        |. symbol "#"
-        |= int
+        |= oneOf
+            [ succeed identity
+                |. spaces
+                |= oneOf
+                    [ succeed Just
+                        |. chompUntil "#"
+                        |. symbol "#"
+                        |= int
+                    , succeed Nothing
+                    ]
+            ]
         |. spaces
         |= guardAction
 
@@ -66,10 +74,10 @@ guardAction =
 
 stringToAction : String -> Parser Action
 stringToAction actionString =
-    let
-        _ =
-            Debug.log "action string" actionString
-    in
+    -- let
+    --     _ =
+    --         Debug.log "action string" actionString
+    -- in
     case actionString of
         "begins shift" ->
             succeed BeginsShift
