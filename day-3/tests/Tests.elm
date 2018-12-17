@@ -1,6 +1,7 @@
 module Tests exposing (tests)
 
 import ClaimParser
+import DayInput exposing (dayInput)
 import Expect
 import SquareInches exposing (..)
 import Test exposing (..)
@@ -46,7 +47,17 @@ tests =
                         |> Expect.equal (Ok expected)
             ]
         , describe "Calculate square inches of fabric"
-            [ test "Given the example input" <|
+            [ test "Creates tuple for a single claim" <|
+                \_ ->
+                    let
+                        claim =
+                            { id = 1, x = 1, y = 3, width = 2, height = 2 }
+                    in
+                    claim
+                        |> SquareInches.createTuplesForClaim
+                        |> Expect.equal
+                            [ ( 2, 4 ), ( 2, 5 ), ( 3, 4 ), ( 3, 5 ) ]
+            , test "Given the example input" <|
                 \_ ->
                     let
                         input =
@@ -55,5 +66,15 @@ tests =
                     input
                         |> SquareInches.calculateSquareInches
                         |> Expect.equal 4
+            , skip <|
+                test "From day input" <|
+                    \_ ->
+                        let
+                            input =
+                                dayInput |> String.trim |> String.lines |> List.map String.trim
+                        in
+                        input
+                            |> SquareInches.calculateSquareInches
+                            |> Expect.equal 112418
             ]
         ]
