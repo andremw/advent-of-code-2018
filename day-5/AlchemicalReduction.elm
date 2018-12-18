@@ -62,6 +62,7 @@ getUnitsWithoutChar char units =
 
 reduce : Char -> List Char -> List Char
 reduce nextChar remaining =
+    -- learned this nice solution here https://github.com/jwoLondon/adventOfCode/blob/master/literateElm/d05_2018.md
     case List.head remaining of
         Nothing ->
             [ nextChar ]
