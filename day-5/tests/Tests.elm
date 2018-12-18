@@ -53,6 +53,6 @@ tests =
                         input =
                             dayInput
                     in
-                    getShortestPolymer input |> String.length |> Expect.equal 4
+                    getShortestPolymer input |> String.length |> Expect.equal 4212
             ]
         ]
